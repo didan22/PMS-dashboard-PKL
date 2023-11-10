@@ -127,3 +127,6 @@ export const detailUser = async function (req, res) {
 		})
 	}
 }
+
+// update user
+// delete user
