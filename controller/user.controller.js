@@ -130,13 +130,9 @@ export const detailUser = async function (req, res) {
 
 // update user
 export const updateUser = async function (req, res) {
-  const id = req.params.id;
-  const updatedUsername = req.body.username;
-  const updatedFullname = req.body.fullname;
-  const updatedEmail = req.body.email;
-  const updatedPassword = req.body.password;
-  const updateRole = req.body.role;
   try {
+    const { id } = req.params;
+
     if (!id) {
       return res.status(400).json({
         success: false,
@@ -150,13 +146,7 @@ export const updateUser = async function (req, res) {
       });
     }
 
-    const updatedUser = await UserModel.findByIdAndUpdate(id, {
-      username: updatedUsername,
-      fullname: updatedFullname,
-      email: updatedEmail,
-      password: updatedPassword,
-      role: updateRole,
-    });
+    const data = await UserModel.findByIdAndUpdate(id);
     if (!data) {
       return res.status(400).json({
         success: false,
@@ -164,11 +154,10 @@ export const updateUser = async function (req, res) {
       });
     }
 
-    return res.status(200).json({
-      status: "success",
-      data: {
-        user: updatedUser,
-      },
+    return res.status(201).json({
+      success: true,
+      message: "Request Valid !",
+      data,
     });
   } catch (error) {
     return res.status(500).json({
@@ -178,3 +167,41 @@ export const updateUser = async function (req, res) {
   }
 };
 // delete user
+export const deleteUser = async function (req, res) {
+  try {
+    // Tangkap Get Data
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "ID kosong !",
+      });
+    }
+    if (!Types.ObjectId.isValid(id.toString())) {
+      return res.status(400).json({
+        success: false,
+        message: "ID tidak valid !",
+      });
+    }
+
+    const data = await UserModel.findByIdAndDelete(id);
+    if (!data) {
+      return res.status(400).json({
+        success: false,
+        message: "Data user tidak ditemukan !",
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: "Request Valid !",
+      data,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message ?? "Backend Server Error !",
+    });
+  }
+};
