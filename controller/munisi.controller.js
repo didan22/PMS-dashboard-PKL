@@ -10,12 +10,8 @@ const reqField = {
 
 export const addMunisi = async function (req, res) {
   try {
-    const reqField = {
-      nama: "Nama Munisi",
-      kaliber: "Kaliber Munisi",
-      gambar: "Gambar Munisi",
-    };
     const { nama, kaliber, gambar } = req.body;
+
     const inputStatus = inputValidation(req.body, reqField);
     if (!inputStatus.valid) {
       return res.status(400).json({
