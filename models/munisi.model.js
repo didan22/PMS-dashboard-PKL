@@ -1,26 +1,27 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose"
+
+export const UserRole = ["user", "admin", "maintainer"]
 
 const munisiSchema = new Schema(
-  {
-    munisi: {
-      type: String,
-      minLength: 4,
-      required: true,
-      unique: true,
-    },
-    kaliber: {
-      type: String,
-      minLength: 4,
-      required: true,
-    },
-    gambar: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+	{
+		nama: {
+			type: String,
+			minLength: 4,
+			required: true,
+		},
+		kaliber: {
+			type: String,
+			minLength: 4,
+			required: true,
+		},
+		gambar: {
+			type: String,
+			required: true,
+		},
+	},
+	{
+		timestamps: true,
+	}
+)
 
-export const MunisiModel = model("Munisi", munisiSchema);
+export const MunisiModel = model("Munisi", munisiSchema)
