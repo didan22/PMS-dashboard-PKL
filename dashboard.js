@@ -1,10 +1,37 @@
 import "dotenv/config"
 import express from "express"
 import mongoose from "mongoose"
+import multer from "multer"
+import path from "path"
 
 const app = express()
 const AppPort = process.env.app_port
 const ConnString = process.env.db_conn
+
+const fileStorage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "images")
+	},
+	filename: (req, file, cb) => {
+		cb(null, file.originalname)
+	},
+})
+
+const fileFilter = (req, file, cb) => {
+	if (
+		file.mimetype === "image/png" ||
+		file.mimetype === "image/jpg" ||
+		file.mimetype === "image/jpeg"
+	) {
+		cb(null, true)
+	} else {
+		cb(null, false)
+	}
+}
+
+app.use(
+	multer({ storage: fileStorage, fileFilter: fileFilter }).single("gambar")
+)
 
 // Input Configuration
 app.use(express.json())

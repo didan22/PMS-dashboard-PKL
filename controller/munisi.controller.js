@@ -19,12 +19,17 @@ export const addMunisi = async function (req, res) {
 				message: `${inputStatus.errMessage}Harus Diisi !`,
 			})
 		}
-
+		if (!req.file) {
+			const err = new Error("image harus diisi")
+			err.errorStatus = 244
+			throw err
+		}
+		const image = req.file.path
 		// Jika inputan munisi lengkap
 		const munisi = new MunisiModel({
-			nama,
-			kaliber,
-			gambar,
+			nama: nama,
+			kaliber: kaliber,
+			gambar: image,
 		})
 
 		const saved = await munisi.save()
