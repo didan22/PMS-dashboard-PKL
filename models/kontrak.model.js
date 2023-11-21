@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose"
+import { Schema, model, ObjectId } from "mongoose"
 
 export const TipeKontrak = ["PLN", "PDN"]
 
@@ -21,6 +21,11 @@ const kontrakSchema = new Schema(
 		jumlahpeti: {
 			type: String,
 			required: true,
+		},
+		munisi: {
+			type: ObjectId,
+			required: true,
+			ref: "Munisi",
 		},
 	},
 	{

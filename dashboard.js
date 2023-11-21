@@ -2,7 +2,6 @@ import "dotenv/config"
 import express from "express"
 import mongoose from "mongoose"
 import multer from "multer"
-import path from "path"
 
 const app = express()
 const AppPort = process.env.app_port
@@ -13,7 +12,7 @@ const fileStorage = multer.diskStorage({
 		cb(null, "images")
 	},
 	filename: (req, file, cb) => {
-		cb(null, file.originalname)
+		cb(null, new Date().getTime() + "-" + file.originalname)
 	},
 })
 
@@ -64,6 +63,8 @@ app.use("/munisi", munisi)
 
 import kontrak from "./routes/kontrak.js"
 app.use("/kontrak", kontrak)
+
+app.use("/images", express.static("./images"))
 
 // Running Server
 app.listen(AppPort, (error) => {

@@ -5,13 +5,10 @@ import { Types } from "mongoose"
 const reqField = {
 	nama: "Nama Munisi",
 	kaliber: "Kaliber Munisi",
-	gambar: "Gambar Munisi",
 }
 
 export const addMunisi = async function (req, res) {
 	try {
-		const { nama, kaliber, gambar } = req.body
-
 		const inputStatus = inputValidation(req.body, reqField)
 		if (!inputStatus.valid) {
 			return res.status(400).json({
@@ -20,16 +17,19 @@ export const addMunisi = async function (req, res) {
 			})
 		}
 		if (!req.file) {
-			const err = new Error("image harus diisi")
+			const err = new Error("gambar harus diisi")
 			err.errorStatus = 244
 			throw err
 		}
-		const image = req.file.path
+		const nama = req.body.nama
+		const gambar = req.file.path.replaceAll("\\", "/")
+		console.log(gambar)
+		const kaliber = req.body.kaliber
 		// Jika inputan munisi lengkap
 		const munisi = new MunisiModel({
 			nama: nama,
+			gambar: gambar,
 			kaliber: kaliber,
-			gambar: image,
 		})
 
 		const saved = await munisi.save()
@@ -139,11 +139,6 @@ export const updateMunisi = async function (req, res) {
 
 		const { nama, kaliber, gambar } = req.body
 		const { validationField } = reqField
-
-		// const validationField = {
-		//   username: "Username",
-		//   fullname: "Nama Lengkap",
-		// }
 
 		const inputStatus = inputValidation(req.body, reqField)
 		if (!inputStatus.valid) {
