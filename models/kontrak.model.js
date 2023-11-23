@@ -23,7 +23,7 @@ const kontrakSchema = new Schema(
 			required: true,
 		},
 		munisi: {
-			type: ObjectId,
+			type: Schema.Types.ObjectId,
 			required: true,
 			ref: "Munisi",
 		},

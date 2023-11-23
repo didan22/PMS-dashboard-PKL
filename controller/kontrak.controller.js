@@ -11,7 +11,7 @@ const reqField = {
 
 export const addKontrak = async function (req, res) {
 	try {
-		const { tipe, nomor, stock, jumlahpeti } = req.body
+		const { tipe, nomor, stock, jumlahpeti, munisi } = req.body
 
 		const inputStatus = inputValidation(req.body, reqField)
 		if (!inputStatus.valid) {
@@ -27,6 +27,7 @@ export const addKontrak = async function (req, res) {
 			nomor,
 			stock,
 			jumlahpeti,
+			munisi,
 		})
 
 		const saved = await kontrak.save()
@@ -67,7 +68,10 @@ export const listKontrak = async function (req, res) {
 		}
 
 		const docs = await KontrakModel.countDocuments(find)
-		const data = await KontrakModel.find(find).limit(limit).skip(offset)
+		const data = await KontrakModel.find(find)
+			.populate({ path: "munisi" })
+			.limit(limit)
+			.skip(offset)
 
 		return res.status(201).json({
 			success: true,
@@ -135,7 +139,7 @@ export const updateKontrak = async function (req, res) {
 			})
 		}
 
-		const { tipe, nomor, stock, jumlahpeti } = req.body
+		const { tipe, nomor, stock, jumlahpeti, munisi } = req.body
 		const { validationField } = reqField
 
 		// const validationField = {
@@ -163,13 +167,14 @@ export const updateKontrak = async function (req, res) {
 		currentKontrak.nomor = nomor
 		currentKontrak.stock = stock
 		currentKontrak.jumlahpeti = jumlahpeti
+		currentKontrak.munisi = munisi
 		const saved = await currentKontrak.save()
 
 		return res.status(200).json({
 			success: true,
 			message: "Request Valid !",
 			data: {
-				munisi: saved,
+				kontrak: saved,
 			},
 		})
 	} catch (error) {
