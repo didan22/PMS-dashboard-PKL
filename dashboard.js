@@ -69,6 +69,7 @@ app.use("/images", express.static("./images"));
 import auth from "./routes/auth.js";
 app.use("/auth", auth);
 
+
 // Running Server
 app.listen(AppPort, (error) => {
   if (error) {

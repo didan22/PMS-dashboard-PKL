@@ -1,8 +1,16 @@
 import mongoose from "mongoose";
 import { UserModel } from "../models/user.model.js";
+import inputValidation from "../utils/inputValidation.js"
 import bcrypt from "bcrypt";
 
-export const signin = async function (req, res) {
+const reqField = {
+	username: "Username",
+	fullname: "Nama Lengkap",
+	password: "Password",
+}
+
+
+export const signup = async function (req, res) {
   try {
     // Tangkap Input Dari User
     // username, fullname, email, password, role,
@@ -42,3 +50,35 @@ export const signin = async function (req, res) {
     });
   }
 };
+
+export const login = async function (req, res) {
+	try {
+		const data = await UserModel.findOne({username:req.body.username})
+		if (!data) {
+			return res.status(400).json({
+				success: false,
+				message: "Data user tidak ditemukan !",
+			})
+		}
+
+    const isCorrect = await bcrypt.compare(req.body.password, data.password)
+    if(!isCorrect) {
+			return res.status(400).json({
+				success: false,
+				message: "Password Salah!",
+			})
+		}
+
+		return res.status(201).json({
+			success: true,
+			message: "Request Valid !",
+			data,
+		})
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			message: error.message ?? "Backend Server Error !",
+		})
+	}
+}
+
