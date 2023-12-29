@@ -53,6 +53,7 @@ export const addUser = async function (req, res) {
 export const listUser = async function (req, res) {
 	try {
 		// Tangkap Get Data
+		console.log("ada request")
 		let { page, limit, search } = req.query
 		let offset = 0
 		page = page ? parseInt(page) : 1
@@ -73,7 +74,7 @@ export const listUser = async function (req, res) {
 		const docs = await UserModel.countDocuments(find)
 		const data = await UserModel.find(find).limit(limit).skip(offset)
 
-		return res.status(201).json({
+		return res.status(200).json({
 			success: true,
 			message: "Request Valid !",
 			totalData: docs,
